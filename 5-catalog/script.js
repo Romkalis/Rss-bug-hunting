@@ -22,33 +22,46 @@ function getFiltered() {
   const category = categorySelect.value;
   const sort = sortSelect.value;
 
-  if (search) {
-    result = result.filter((p) => p.name === search);
+  console.log(sort)
+
+  
+  
+  if (category !== "all") {
+    result = products.filter((p) => p.category === category);
   }
 
-  if (category !== "all") {
-    result = products.filter((p) => p.category !== category);
+  
+  if (search) {
+    result = result.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
   }
 
   if (sort === "asc") {
-    result.sort((a, b) => b.price - a.price);
-  } else if (sort === "desc") {
     result.sort((a, b) => a.price - b.price);
+  } else if (sort === "desc") {
+    result.sort((a, b) => b.price - a.price);
+  }  else {
+    result.sort((a, b) => a.id - b.id);
   }
 
+  countEl.textContent = result.length;
   return result;
 }
 
 function render() {
   const items = getFiltered();
+  grid.innerHTML = ""
+  console.log(items)
+
   items.forEach((p) => {
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `<h3>${p.name}</h3><p class="cat">${p.category}</p><p class="price">$${p.price}</p>`;
     grid.appendChild(card);
   });
-  countEl.textContent = products.length;
+  
 }
+
+render()
 
 searchInput.addEventListener("input", render);
 categorySelect.addEventListener("change", render);
@@ -56,4 +69,7 @@ sortSelect.addEventListener("change", render);
 
 resetBtn.addEventListener("click", () => {
   searchInput.value = "";
+  categorySelect.value = "all";
+  sortSelect.value = "default";
+  render()
 });

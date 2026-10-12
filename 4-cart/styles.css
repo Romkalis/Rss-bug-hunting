@@ -184,4 +184,10 @@ body {
   color: #334155;
   font-weight: 600;
   cursor: pointer;
+  transition: all .3s ease;
+
+  &:hover {
+    background: #eb2525;
+    color: #ffffff;
+  }
 }
